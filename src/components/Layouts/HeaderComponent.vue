@@ -18,8 +18,9 @@
             <v-tab to="/">
               Home
             </v-tab>
-            <v-tab to="/about">
-              About
+            <!-- <a href="/#about" class="v-tab">hola</a> -->
+            <v-tab class="text-gray">
+              <a href="/#about" class="text-decoration-none">About</a>
             </v-tab>
             <v-tab to="/contact">
               Contact
@@ -42,34 +43,10 @@ export default {
 </script>
 
 <style>
-.logo {
-  margin-right: 0.5rem;
+.text-gray a {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
-.theme--light.v-toolbar.v-sheet {
-  background-color: transparent !important;
-  border-color: transparent;
-}
-.theme--light.v-card {
-  background-color: transparent !important;
-}
-.v-tabs {
-  width: 0;
-}
-.v-sheet.v-toolbar:not(.v-sheet--outlined) {
-  box-shadow: none;
-}
-.v-btn--icon {
-  display: none;
-}
-.v-slide-group__content {
-  justify-content: flex-end;
-}
-@media (max-width: 768px) {
-  .v-btn--icon {
-    display: inline-block;
-  }
-  .v-tabs {
-    display: none;
-  }
+.v-tab--active.text-gray a {
+  color: black !important;
 }
 </style>

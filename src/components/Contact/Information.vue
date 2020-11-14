@@ -19,28 +19,3 @@ export default {
   name: "Information",
 };
 </script>
-
-<style>
-.contact-info {
-  width: 100%;
-}
-.contact-info ul {
-  padding-left: 0;
-}
-
-.contact-info ul li {
-  line-height: 40px;
-  display: flex;
-  align-items: center;
-}
-
-.contact-info ul li i {
-  margin-right: 10px;
-  color: #26272e;
-  font-size: 16px;
-}
-
-.contact-info ul li {
-  font-size: 14px;
-}
-</style>

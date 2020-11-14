@@ -1,0 +1,30 @@
+.logo {
+  margin-right: 0.5rem;
+}
+.theme--light.v-toolbar.v-sheet {
+  background-color: transparent !important;
+  border-color: transparent;
+}
+.theme--light.v-card {
+  background-color: transparent !important;
+}
+.v-tabs {
+  width: 0;
+}
+.v-sheet.v-toolbar:not(.v-sheet--outlined) {
+  box-shadow: none;
+}
+.v-btn--icon {
+  display: none;
+}
+.v-slide-group__content {
+  justify-content: flex-end;
+}
+@media (max-width: 768px) {
+  .v-btn--icon {
+    display: inline-block;
+  }
+  .v-tabs {
+    display: none;
+  }
+}

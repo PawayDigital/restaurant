@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import HeaderComponent from "@/components/Header/HeaderComponent.vue";
+import HeaderComponent from "@/components/Layouts/HeaderComponent.vue";
 import Title from "@/components/Contact/Title.vue";
 import GoogleMaps from "@/components/Contact/GoogleMaps.vue";
 import Information from "@/components/Contact/Information.vue";
 import FormTitle from "@/components/Contact/FormTitle.vue";
-import FooterComponent from "@/components/Footer/FooterComponent.vue";
+import FooterComponent from "@/components/Layouts/FooterComponent.vue";
 
 export default {
   name: "Contact",
@@ -42,21 +42,7 @@ export default {
 </script>
 
 <style>
-.contact-section {
-  position: relative;
-  z-index: 1;
-  padding-top: 1px;
-  padding-bottom: 60px;
-}
-.contact-maps {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-}
-.contact-wrap {
-  background-color: #fff;
-  padding: 40px 40px 0 40px;
-  margin-top: 360px;
-}
+@import "../assets/css/header.css";
+@import "../assets/css/contact.css";
+@import "../assets/css/footer.css";
 </style>
