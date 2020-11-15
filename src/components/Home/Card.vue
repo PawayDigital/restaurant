@@ -1,8 +1,8 @@
 <template>
-  <v-main id="planes" class="text-center">
-    <h4 class="text-h5">Planes</h4>
+  <v-main id="planes" class="text-center mt-5 mb-16">
+    <h4 class="text-h5 mb-4">Planes</h4>
     <v-row>
-      <v-col cols="12" md="4"
+      <v-col cols="12" sm="4"
         ><v-card class="mx-auto" max-width="344">
           <v-card-text class="pb-0">
             <span class="display-1 text--primary">
@@ -34,7 +34,7 @@
           </v-card-actions>
         </v-card></v-col
       >
-      <v-col cols="12" md="4"
+      <v-col cols="12" sm="4"
         ><v-card class="mx-auto" max-width="344">
           <v-card-text class="pb-0">
             <span class="display-1 text--primary">
@@ -66,7 +66,7 @@
           </v-card-actions>
         </v-card></v-col
       >
-      <v-col cols="12" md="4"
+      <v-col cols="12" sm="4"
         ><v-card class="mx-auto" max-width="344">
           <v-card-text class="pb-0">
             <span class="display-1 text--primary">

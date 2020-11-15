@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="12" md="6">
+  <v-col cols="12" sm="6">
     <div>
       <h3>¿Necesistas acesoria?</h3>
       <p class="font-weight-light">

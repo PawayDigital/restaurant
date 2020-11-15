@@ -1,5 +1,5 @@
 <template>
-  <v-row id="about">
+  <v-row id="about" class="mt-8 mb-9">
     <!-- <a href="#about"></a> -->
     <v-col cols="12" lg="7" class="order-lg-2">
       <h4 class="text-center text-h5 mb-3">Restaurant</h4>

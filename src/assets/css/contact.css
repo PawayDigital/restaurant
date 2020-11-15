@@ -76,3 +76,9 @@
 .contact-info ul li {
   font-size: 14px;
 }
+@media (max-width: 411px) {
+  .padding-contact {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}

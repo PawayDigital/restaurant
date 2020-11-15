@@ -10,7 +10,7 @@
         class="contact-maps"
       />
       <v-container>
-        <v-row class="contact-wrap">
+        <v-row class="contact-wrap padding-contact">
           <Information />
           <FormTitle />
         </v-row>

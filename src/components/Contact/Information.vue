@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="12" md="6">
+  <v-col cols="12" sm="6">
     <div class="contact-info">
       <h3>Información de contacto</h3>
       <p class="text-secondary font-weight-light">

@@ -14,3 +14,20 @@
     margin-top: 0;
   }
 }
+
+@media (max-width: 768px) {
+  .title-content {
+    text-align: center;
+  }
+  #content .v-image {
+    max-height: 400px;
+  }
+}
+@media (max-width: 411px) {
+  #content .v-image {
+    max-height: 200px;
+  }
+  #content .v-responsive__sizer {
+    padding-bottom: 0 !important;
+  }
+}
