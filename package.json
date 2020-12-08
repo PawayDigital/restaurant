@@ -9,8 +9,10 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "@mdi/font": "^3.6.95",
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "roboto-fontface": "*",
+    "sweetalert": "^2.1.2",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue2-google-maps": "^0.10.7",

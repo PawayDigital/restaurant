@@ -1,5 +1,5 @@
 <template>
-  <div id="header-component">
+  <div>
     <v-container>
       <v-card flat tile>
         <v-app-bar app fixed dense>
@@ -16,13 +16,16 @@
 
           <v-tabs color="secundary">
             <v-tab to="/">
-              Home
+              Menu
             </v-tab>
             <v-tab to="/contact">
-              Contact
+              Jugos
             </v-tab>
             <v-tab to="/login">
-              Login
+              Sobre Nosotros
+            </v-tab>
+            <v-tab to="/login">
+              Contacto
             </v-tab>
           </v-tabs>
           <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -50,7 +53,6 @@
 
 <script>
 export default {
-  name: "HeaderComponent",
   data() {
     return {
       drawer: false,

@@ -1,0 +1,41 @@
+.body404 {
+  width: auto;
+}
+._margin {
+  margin-top: 7rem;
+}
+.bg-dark404 {
+  background: #f0f0f0 !important;
+}
+.bg-404 {
+  left: 7.5em;
+  top: 9.563em;
+  height: 21.875em;
+  background: #00000047;
+}
+
+.h1-404 {
+  font-size: 3.5em;
+}
+
+.p-404 {
+  font: normal normal 600 45px/65px Open Sans;
+}
+
+.p2-404 {
+  font: normal normal 600 20px/41px Open Sans;
+}
+
+.btn-404 {
+  color: #505050 !important;
+  font: normal normal 600 19px/41px Open Sans;
+  border: 1px solid #505050;
+}
+
+.btn-404:hover {
+  text-decoration-line: #505050;
+}
+
+.color {
+  color: #505050;
+}

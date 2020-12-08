@@ -19,6 +19,8 @@ export default new Vuetify({
         success: "#4CAF50",
         warning: "#FFC107",
         blue: "#12bdc9",
+        menu: "#F5F5F5",
+        white: "#FFFFFF",
       },
     },
   },

@@ -1,0 +1,9 @@
+.v-application .cyan.darken-1 {
+  background-color: #f5f5f5 !important;
+}
+.v-list-item__subtitle {
+  color: black !important;
+}
+.theme--dark.v-icon {
+  color: black !important;
+}

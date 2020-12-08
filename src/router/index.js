@@ -10,6 +10,16 @@ const routes = [
     component: () => import("@/views/Home.vue"),
   },
   {
+    path: "/contact",
+    name: "Contact",
+    component: () => import("@/views/Contact.vue"),
+  },
+  {
+    path: "*",
+    name: "Error404",
+    component: () => import("@/views/Error404.vue"),
+  },
+  {
     path: "/login",
     name: "Login",
     component: () => import("@/views/Login.vue"),
@@ -20,9 +30,19 @@ const routes = [
     component: () => import("@/views/Join.vue"),
   },
   {
-    path: "/contact",
-    name: "Contact",
-    component: () => import("@/views/Contact.vue"),
+    path: "/admin",
+    name: "Admin",
+    component: () => import("@/views/Admin.vue"),
+  },
+  {
+    path: "/menu",
+    name: "Menu",
+    component: () => import("@/views/Menu.vue"),
+  },
+  {
+    path: "/menu-segundo",
+    name: "Menu2",
+    component: () => import("@/views/Menu2.vue"),
   },
 ];
 

@@ -12,7 +12,8 @@
       <v-container>
         <v-row class="contact-wrap padding-contact">
           <Information />
-          <FormTitle />
+          <!-- <- tengo que modificar este componente-->
+          <!-- <FormTitle /> -->
         </v-row>
       </v-container>
     </section>
