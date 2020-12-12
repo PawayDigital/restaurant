@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import AuthService from "@/Auth/services/auth.service";
 import swal from "sweetalert";
 export default {
   name: "Form",
@@ -58,23 +59,13 @@ export default {
   methods: {
     login() {
       this.error = false;
-      fetch(process.env.VUE_APP_RUTA_API + "auth/local", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          identifier: this.email,
-          password: this.password,
-        }),
-      })
-        .then(async (response) => {
-          const data = await response.json();
 
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response status
-            const error = (data && data.message) || response.status;
-            return Promise.reject(error);
-          }
+      AuthService.login({
+        identifier: this.email,
+        password: this.password,
+      })
+        .then((response) => {
+          const data = response.data;
 
           localStorage.setItem("token", data.jwt);
           localStorage.setItem("user", JSON.stringify(data.user));
@@ -82,8 +73,6 @@ export default {
           this.$router.push("/admin");
         })
         .catch((error) => {
-          this.errorMessage = error;
-          console.error("There was an error!", error);
           this.error = true;
         });
     },

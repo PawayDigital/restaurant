@@ -48,7 +48,7 @@
 
 <script>
 import swal from "sweetalert";
-import axios from "axios";
+import AuthService from "@/Auth/services/auth.service";
 export default {
   name: "Form",
   data() {
@@ -60,25 +60,13 @@ export default {
   },
   methods: {
     register() {
-      fetch(process.env.VUE_APP_RUTA_API + "auth/local/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: this.email,
-          email: this.email,
-          password: this.password,
-          nombre_empresa: this.n_empresa,
-        }),
+      AuthService.register({
+        username: this.email,
+        email: this.email,
+        password: this.password,
+        nombre_empresa: this.n_empresa,
       })
-        .then(async (response) => {
-          const data = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response status
-            const error = (data && data.message) || response.status;
-            return Promise.reject(error);
-          }
+        .then((response) => {
           swal("Registrado!", "Bienvenido a Tu carta online", "success");
           this.$router.push("/login");
         })
