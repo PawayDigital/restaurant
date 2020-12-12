@@ -26,7 +26,7 @@ import HeaderComponent from "@/components/Layouts/HeaderComponent.vue";
 import Title from "@/components/Contact/Title.vue";
 import GoogleMaps from "@/components/Contact/GoogleMaps.vue";
 import Information from "@/components/Contact/Information.vue";
-import FormTitle from "@/components/Contact/FormTitle.vue";
+// import FormTitle from "@/components/Contact/FormTitle.vue";
 import FooterComponent from "@/components/Layouts/FooterComponent.vue";
 
 export default {
@@ -36,7 +36,7 @@ export default {
     Title,
     GoogleMaps,
     Information,
-    FormTitle,
+    // FormTitle,
     FooterComponent,
   },
 };

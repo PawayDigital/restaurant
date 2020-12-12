@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import swal from "sweetalert";
 export default {
   name: "Form",
   data() {
@@ -77,10 +78,8 @@ export default {
 
           localStorage.setItem("token", data.jwt);
           localStorage.setItem("user", JSON.stringify(data.user));
-          // swal("Hola!", "Bienvenido de nuevo", "success");
-          // this.$router.push("/admin");
-          console.log(data.jwt);
-          console.log(data.user);
+          swal("Hola!", "Bienvenido de nuevo", "success");
+          this.$router.push("/admin");
         })
         .catch((error) => {
           this.errorMessage = error;

@@ -33,6 +33,9 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: () => import("@/views/Admin.vue"),
+    meta: {
+      auth: true,
+    },
   },
   {
     path: "/menu",
@@ -50,6 +53,16 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.auth)) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      next("login");
+    }
+  }
+  next();
 });
 
 export default router;

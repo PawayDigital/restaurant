@@ -79,12 +79,16 @@ export default {
             const error = (data && data.message) || response.status;
             return Promise.reject(error);
           }
-          swal("Registrado!", "Bienvenido a la familia unsplash", "success");
+          swal("Registrado!", "Bienvenido a Tu carta online", "success");
           this.$router.push("/login");
         })
         .catch((error) => {
           this.errorMessage = error;
-          swal("Error!", "correo o usuario ya estan registrados", "error");
+          swal(
+            "Error!",
+            "correo o nombre de la empresa ya estan registrados",
+            "error"
+          );
           console.error("There was an error!", error);
         });
     },

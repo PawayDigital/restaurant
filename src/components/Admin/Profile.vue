@@ -14,17 +14,19 @@
                   Empresa
                 </div>
                 <v-list-item-title class="headline mb-3">
-                  Mi Restaurante
+                  {{ this.empresa.nombre_empresa }}
                 </v-list-item-title>
                 <v-list-item-subtitle class="mb-2"
-                  >Correo: alexlds26@gmail.com</v-list-item-subtitle
+                  >Correo: {{ this.empresa.email }}</v-list-item-subtitle
                 >
-                <v-list-item-subtitle>Celular: 3222519053</v-list-item-subtitle>
+                <v-list-item-subtitle
+                  >Celular: {{ this.empresa.celular }}</v-list-item-subtitle
+                >
               </v-list-item-content>
 
               <v-list-item-avatar tile size="80" color="grey"
                 ><v-img
-                  src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+                  :src="'http://localhost:1337' + this.foto.imagen"
                 ></v-img
               ></v-list-item-avatar>
             </v-list-item>
@@ -45,12 +47,47 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Profile",
   data() {
     return {
+      empresa: [],
+      foto: [],
       date2: new Date().toISOString().substr(0, 10),
     };
+  },
+  mounted() {
+    this.user = JSON.parse(localStorage.getItem("user"));
+    this.userData();
+  },
+  methods: {
+    userData() {
+      axios
+        .get("http://localhost:1337/users/me", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            this.empresa = res.data;
+          }
+        });
+    },
+    fotoData() {
+      axios
+        .get("http://localhost:1337/foto/me", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            console.log((this.foto = res.data));
+          }
+        });
+    },
   },
 };
 </script>

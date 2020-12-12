@@ -63,7 +63,9 @@
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn text color="dark accent-4">
-              Empezar
+              <router-link to="/join" class="text-decoration-none"
+                >Empezar</router-link
+              >
             </v-btn>
           </v-card-actions>
         </v-card></v-col
@@ -95,7 +97,9 @@
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn text color="dark accent-4">
-              Empezar
+              <router-link to="/join" class="text-decoration-none"
+                >Empezar</router-link
+              >
             </v-btn>
           </v-card-actions>
         </v-card></v-col
