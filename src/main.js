@@ -8,6 +8,7 @@ import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import * as VueGoogleMaps from "vue2-google-maps";
+import css from "./styles/style";
 
 Vue.use(vuetify, {
   icons: {
@@ -17,7 +18,7 @@ Vue.use(vuetify, {
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyCe2q1gFSd75jKUnTDPq0nZWaMlEu6vL30",
+    key: process.env.VUE_APP_GOOGLE_MAPS,
   },
 });
 
@@ -26,6 +27,7 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  css,
   vuetify,
   render: (h) => h(App),
 }).$mount("#app");

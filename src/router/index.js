@@ -7,32 +7,40 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/Home.vue"),
+    component: () => import("@/Home/pages/Home.vue"),
   },
   {
     path: "/contact",
     name: "Contact",
-    component: () => import("@/views/Contact.vue"),
+    component: () => import("@/Contact/pages/Contact.vue"),
   },
   {
     path: "*",
     name: "Error404",
-    component: () => import("@/views/Error404.vue"),
+    component: () => import("@/Error/pages/Error404.vue"),
   },
   {
     path: "/login",
     name: "Login",
-    component: () => import("@/views/Login.vue"),
+    component: () => import("@/Auth/Login/pages/Login.vue"),
   },
   {
-    path: "/join",
-    name: "Join",
-    component: () => import("@/views/Join.vue"),
+    path: "/register",
+    name: "Register",
+    component: () => import("@/Auth/Register/pages/Register.vue"),
   },
   {
     path: "/admin",
     name: "Admin",
-    component: () => import("@/views/Admin.vue"),
+    component: () => import("@/Admin/Empresas/pages/Profile.vue"),
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: "/carta",
+    name: "Carta",
+    component: () => import("@/Admin/Empresas/pages/Carta.vue"),
     meta: {
       auth: true,
     },
@@ -40,12 +48,12 @@ const routes = [
   {
     path: "/menu",
     name: "Menu",
-    component: () => import("@/views/Menu.vue"),
+    component: () => import("@/Admin/Menus/MenuOne/pages/Menu.vue"),
   },
   {
     path: "/menu-segundo",
-    name: "Menu2",
-    component: () => import("@/views/Menu2.vue"),
+    name: "MenuTwo",
+    component: () => import("@/Admin/Menus/MenuTwo/pages/Menu.vue"),
   },
 ];
 
