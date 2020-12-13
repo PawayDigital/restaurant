@@ -108,7 +108,15 @@
                       <v-btn color="blue darken-1" text @click="close">
                         Cancelar
                       </v-btn>
-                      <v-btn color="blue darken-1" text @click="save">
+                      <v-btn
+                        v-if="edit_id"
+                        color="blue darken-1"
+                        text
+                        @click="editar()"
+                      >
+                        editar
+                      </v-btn>
+                      <v-btn v-else color="blue darken-1" text @click="save">
                         Guardar
                       </v-btn>
                     </v-card-actions>
@@ -189,11 +197,11 @@ export default {
       { text: "Acciones", value: "actions", sortable: false },
     ],
     previewImage: "https://via.placeholder.com/150",
-    select: { state: "Florida", abbr: "FL" },
     cate: [],
 
     desserts: [],
     editedIndex: -1,
+    edit_id: false,
     editedItem: {
       id: null,
       nombre: "",
@@ -277,6 +285,7 @@ export default {
               id: item.id,
               imagen: JSON.stringify(item.imagen.url).replace(/['"]+/g, ""),
               nombre: item.nombre,
+              descripcion: item.descripcion,
               precio: item.precio,
             };
           });
@@ -287,6 +296,8 @@ export default {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.edit_id = true;
+      localStorage.setItem("id", this.editedItem.id);
     },
 
     deleteItem(item) {
@@ -335,6 +346,50 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+    },
+
+    editar() {
+      const id = localStorage.getItem("id");
+      const data = {
+        nombre: this.editedItem.nombre,
+        descripcion: this.editedItem.descripcion,
+        precio: this.editedItem.precio,
+        categorias: [this.editedItem.categoria],
+        estado: true,
+      };
+      const fd = new FormData();
+      fd.append("files.imagen", this.editedItem.url);
+      fd.append("data", JSON.stringify(data));
+      axios
+        .put(
+          process.env.VUE_APP_RUTA_API + "/productos/" + id,
+
+          fd,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          localStorage.removeItem("id");
+          if (this.editedIndex > -1) {
+            Object.assign(this.desserts[this.editedIndex], this.editedItem);
+          } else {
+            this.desserts.push(this.editedItem);
+          }
+          swal("Actualizado!", "se actualizo tu producto", "success");
+          this.close();
+        })
+        .catch((error) => {
+          console.log(error);
+          swal(
+            "Ha ocurrido un error!",
+            "tu producto no se ha actualizado",
+            "error"
+          );
+        });
     },
 
     save() {
