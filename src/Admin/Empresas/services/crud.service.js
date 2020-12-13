@@ -4,12 +4,35 @@ const token = localStorage.getItem("token");
 
 export default new (class CrudService {
   getCategorias() {
-    return axios.get(_url + "/categorias", {
+    return axios.get(_url + "/categorias/me", {
       headers: {
         Authorization: "Bearer " + token,
       },
     });
   }
+  categoriaDelete(id) {
+    return axios.delete(_url + "/categorias/" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  }
+  categoriaUpdate(data, id) {
+    return axios.put(_url + "/categorias/" + id, data, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  }
+  categoriaSave(data) {
+    return axios.post(_url + "/categorias", data, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  }
+
+  // productos
   getProductos() {
     return axios.get(_url + "/producto/me", {
       headers: {

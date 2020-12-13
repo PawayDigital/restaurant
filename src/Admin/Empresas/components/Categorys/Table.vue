@@ -50,9 +50,29 @@
                       <v-btn color="blue darken-1" text @click="close">
                         Cancelar
                       </v-btn>
-                      <v-btn color="blue darken-1" text @click="save">
+                      <v-btn
+                        v-if="edit_id"
+                        :disabled="loading"
+                        color="blue darken-1"
+                        text
+                        @click="editar()"
+                      >
+                        editar
+                      </v-btn>
+                      <v-btn
+                        v-else
+                        :disabled="loading"
+                        color="blue darken-1"
+                        text
+                        @click="save()"
+                      >
                         Guardar
                       </v-btn>
+                      <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="black"
+                      ></v-progress-circular>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -68,10 +88,16 @@
                       >
                       <v-btn
                         color="blue darken-1"
+                        :disabled="loading"
                         text
                         @click="deleteItemConfirm"
                         >Confirmar</v-btn
                       >
+                      <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="black"
+                      ></v-progress-circular>
                       <v-spacer></v-spacer>
                     </v-card-actions>
                   </v-card>
@@ -100,9 +126,12 @@
 
 <script>
 import axios from "axios";
+import swal from "sweetalert";
+import CrudService from "@/Admin/Empresas/services/crud.service";
 export default {
   name: "Table",
   data: () => ({
+    loading: false,
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -115,6 +144,7 @@ export default {
       },
       { text: "Acciones", value: "actions", sortable: false },
     ],
+    edit_id: false,
     desserts: [],
     editedIndex: -1,
     editedItem: {
@@ -146,37 +176,51 @@ export default {
 
   methods: {
     initialize() {
-      axios
-        .get(process.env.VUE_APP_RUTA_API + "/categorias", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          this.desserts = res.data.map((item) => {
-            return {
-              nombre: item.nombre,
-            };
-          });
+      CrudService.getCategorias().then((res) => {
+        this.desserts = res.data.map((item) => {
+          return {
+            id: item.id,
+            nombre: item.nombre,
+          };
         });
+      });
     },
 
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.edit_id = true;
+      localStorage.setItem("id", this.editedItem.id);
     },
 
     deleteItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
+      localStorage.setItem("id", this.editedItem.id);
     },
 
     deleteItemConfirm() {
-      // metodo axios
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
+      this.loading = true;
+      const id = localStorage.getItem("id");
+      CrudService.categoriaDelete(id)
+        .then((res) => {
+          this.loading = false;
+          localStorage.removeItem("id");
+          swal("eliminado!", "se elimino la categoria", "success");
+          this.closeDelete();
+          this.desserts.splice(this.editedIndex, 1);
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          swal(
+            "Ha ocurrido un error!",
+            "tu categoria no se ha eliminado",
+            "error"
+          );
+        });
     },
 
     close() {
@@ -194,31 +238,60 @@ export default {
         this.editedIndex = -1;
       });
     },
+    editar() {
+      this.loading = true;
+      // metodo axios
+      const id = localStorage.getItem("id");
+      CrudService.categoriaUpdate(
+        {
+          nombre: this.editedItem.nombre,
+        },
+        id
+      )
+        .then((res) => {
+          if (this.editedIndex > -1) {
+            Object.assign(this.desserts[this.editedIndex], this.editedItem);
+          } else {
+            this.desserts.push(this.editedItem);
+          }
+          this.close();
+          swal("actualizado!", "se actualizo una categoria", "success");
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          swal(
+            "Ha ocurrido un error!",
+            "tu categoria no se ha actualizado",
+            "error"
+          );
+        });
+    },
 
     save() {
+      this.loading = true;
       // metodo axios
-      axios
-        .post(
-          process.env.VUE_APP_RUTA_API + "/categorias",
-          {
-            nombre: this.editedItem.nombre,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        )
+      CrudService.categoriaSave({
+        nombre: this.editedItem.nombre,
+      })
         .then((res) => {
-          console.log(res);
+          if (this.editedIndex > -1) {
+            Object.assign(this.desserts[this.editedIndex], this.editedItem);
+          } else {
+            this.desserts.push(this.editedItem);
+          }
+          this.close();
+          swal("Agregado!", "agregaste una categoria", "success");
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          swal(
+            "Ha ocurrido un error!",
+            "tu categoria no se ha guardado",
+            "error"
+          );
         });
-      console.log(this.editedItem.nombre);
-      // if (this.editedIndex > -1) {
-      //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      // } else {
-      //   this.desserts.push(this.editedItem);
-      // }
-      // this.close();
     },
   },
 };

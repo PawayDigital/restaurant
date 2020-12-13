@@ -39,7 +39,7 @@
 
     <div class="text-center mt-4">
       Don't have an account?
-      <router-link to="/join" class="text--secondary">Join</router-link>
+      <router-link to="/register" class="text--secondary">Join</router-link>
     </div>
   </v-main>
 </template>
