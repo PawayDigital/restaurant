@@ -38,6 +38,14 @@ const routes = [
     },
   },
   {
+    path: "/edit-profile",
+    name: "EditarEmpresa",
+    component: () => import("@/Admin/Empresas/pages/Editar.vue"),
+    meta: {
+      auth: true,
+    },
+  },
+  {
     path: "/carta",
     name: "Carta",
     component: () => import("@/Admin/Empresas/pages/Carta.vue"),

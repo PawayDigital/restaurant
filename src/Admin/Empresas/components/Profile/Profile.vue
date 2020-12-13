@@ -24,16 +24,38 @@
                 >
               </v-list-item-content>
 
-              <v-list-item-avatar tile size="80" color="grey"
-                ><v-img
-                  :src="'http://localhost:1337' + this.foto.imagen"
-                ></v-img
-              ></v-list-item-avatar>
+              <div
+                v-for="img in perfilimg"
+                :key="img.id"
+                tile
+                size="80"
+                color="grey"
+              >
+                <div v-if="img.imagen === null">
+                  <v-img
+                    :lazy-src="userImage"
+                    :src="userImage"
+                    height="100"
+                    width="100"
+                  ></v-img>
+                </div>
+
+                <div v-else>
+                  <v-img
+                    :lazy-src="_url + img.imagen.url"
+                    :src="_url + img.imagen.url"
+                    height="100"
+                    width="100"
+                  ></v-img>
+                </div>
+              </div>
             </v-list-item>
 
             <v-card-actions>
               <v-btn outlined text>
-                Editar Informacion
+                <router-link to="/edit-profile" class="text-decoration-none"
+                  >Editar Informacion</router-link
+                >
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -47,46 +69,42 @@
 </template>
 
 <script>
-import axios from "axios";
+import ProfileService from "@/Admin/Empresas/services/profile.service";
 export default {
   name: "Profile",
   data() {
     return {
       empresa: [],
-      foto: [],
+      userImage:
+        "https://www.softzone.es/app/uploads-softzone.es/2018/04/guest.png",
+      perfilimg: [],
       date2: new Date().toISOString().substr(0, 10),
     };
+  },
+  computed: {
+    _url() {
+      return process.env.VUE_APP_RUTA_API;
+    },
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem("user"));
     this.userData();
+    this.miperfilimg();
   },
   methods: {
     userData() {
-      axios
-        .get(process.env.VUE_APP_RUTA_API + "users/me", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            this.empresa = res.data;
-          }
-        });
+      ProfileService.perfil().then((res) => {
+        if (res.status == 200) {
+          this.empresa = res.data;
+        }
+      });
     },
-    fotoData() {
-      axios
-        .get(process.env.VUE_APP_RUTA_API + "foto/me", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            console.log((this.foto = res.data));
-          }
-        });
+    miperfilimg() {
+      ProfileService.imgPerfil().then((res) => {
+        if (res.status == 200) {
+          this.perfilimg = res.data;
+        }
+      });
     },
   },
 };
