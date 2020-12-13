@@ -86,7 +86,7 @@ export default {
       });
     },
     default() {
-      MenuService.producto_one(11).then((res) => {
+      MenuService.producto_one(17).then((res) => {
         this.producto_one = res.data;
       });
     },

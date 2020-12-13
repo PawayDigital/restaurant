@@ -29,7 +29,7 @@
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn text color="dark accent-4">
-              <router-link to="/join" class="text-decoration-none"
+              <router-link to="/register" class="text-decoration-none"
                 >Empezar</router-link
               >
             </v-btn>
@@ -63,7 +63,7 @@
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn text color="dark accent-4">
-              <router-link to="/join" class="text-decoration-none"
+              <router-link to="/register" class="text-decoration-none"
                 >Empezar</router-link
               >
             </v-btn>
@@ -97,7 +97,7 @@
           </v-card-text>
           <v-card-actions class="justify-center">
             <v-btn text color="dark accent-4">
-              <router-link to="/join" class="text-decoration-none"
+              <router-link to="/register" class="text-decoration-none"
                 >Empezar</router-link
               >
             </v-btn>

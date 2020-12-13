@@ -15,3 +15,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.theme--light.v-card {
+  background-color: white !important;
+}
+</style>

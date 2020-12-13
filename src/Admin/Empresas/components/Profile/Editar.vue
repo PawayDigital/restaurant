@@ -60,13 +60,24 @@
               label="Descripcion de la empresa"
             ></v-textarea>
           </v-col>
-          <v-col cols="12" sm="8" md="4">
+          <v-col cols="12" sm="8" md="2">
             <v-text-field
               label="Celular"
               v-model="celular"
               type="number"
               required
             ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="8" md="2">
+            <select class="select-css" v-model="menu">
+              <option value="">seleccione Tu Menu</option>
+              <option
+                v-for="menu in plantilla"
+                v-bind:key="menu.id"
+                :value="menu.id"
+                >{{ menu.nombre }}</option
+              >
+            </select>
           </v-col>
         </v-row>
         <v-row>
@@ -90,6 +101,7 @@
 
 <script>
 import swal from "sweetalert";
+import axios from "axios";
 import ProfileService from "@/Admin/Empresas/services/profile.service";
 export default {
   data() {
@@ -104,9 +116,12 @@ export default {
       descripcion: "",
       password: "",
       n_empresa: "",
+      plantilla: [],
+      menu: null,
     };
   },
   mounted() {
+    this.plantillas();
     ProfileService.perfil().then((res) => {
       ProfileService.imgPerfil().then((data) => {
         const imagen = data.data;
@@ -120,6 +135,11 @@ export default {
     this.save = JSON.parse(localStorage.getItem("user"));
   },
   methods: {
+    plantillas() {
+      axios.get(process.env.VUE_APP_RUTA_API + "/plantillas").then((res) => {
+        this.plantilla = res.data;
+      });
+    },
     selectImage() {
       this.$refs.fileInput.click();
     },
@@ -152,6 +172,7 @@ export default {
           celular: this.celular,
           descripcion: this.descripcion,
           nombre_empresa: this.n_empresa,
+          plantilla: this.menu,
         },
         this.save.id
       )
@@ -162,6 +183,7 @@ export default {
           fd.append("files.imagen", this.url);
           fd.append("data", JSON.stringify(data));
           ProfileService.updateImg(fd, this.save.foto.id).then((res) => {
+            console.log(res);
             swal(
               "Actualizado!",
               "Los datos de tu empresa se han actualizado",
@@ -171,6 +193,7 @@ export default {
           this.$router.push("/admin");
         })
         .catch((error) => {
+          console.log(error);
           swal("Error!", "Tus datos no se han actualizado", "error");
         });
     },

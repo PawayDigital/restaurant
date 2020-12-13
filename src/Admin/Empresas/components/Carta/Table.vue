@@ -316,6 +316,7 @@ export default {
       this.loading = true;
       // metodo axios
       const id = localStorage.getItem("id");
+      console.log(id);
       CrudService.delete(id)
         .then((res) => {
           this.loading = false;
@@ -353,6 +354,7 @@ export default {
     editar() {
       this.loading = true;
       const id = localStorage.getItem("id");
+      console.log(id);
       const data = {
         nombre: this.editedItem.nombre,
         descripcion: this.editedItem.descripcion,
@@ -408,6 +410,7 @@ export default {
           }
           swal("Agregado!", "agregaste un nuevo producto", "success");
           this.close();
+          this.$router.push((location.href = "/carta"));
         })
         .catch((error) => {
           console.log(error);

@@ -48,6 +48,7 @@
 
 <script>
 import swal from "sweetalert";
+import axios from "axios";
 import AuthService from "@/Auth/services/auth.service";
 export default {
   name: "Form",
@@ -65,8 +66,10 @@ export default {
         email: this.email,
         password: this.password,
         nombre_empresa: this.n_empresa,
+        plantilla: 2,
       })
         .then((response) => {
+          this.imguser(response.jwt);
           swal("Registrado!", "Bienvenido a Tu carta online", "success");
           this.$router.push("/login");
         })
@@ -79,6 +82,20 @@ export default {
           );
           console.error("There was an error!", error);
         });
+    },
+    imguser(token) {
+      var formData = new FormData();
+      let data = {};
+      formData.append("files.imagen", this.image);
+      formData.append("data", JSON.stringify(data));
+      axios
+        .post("http://localhost:1337/fotos", formData, {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {});
     },
   },
 };

@@ -204,6 +204,7 @@ export default {
     deleteItemConfirm() {
       this.loading = true;
       const id = localStorage.getItem("id");
+      console.log(id);
       CrudService.categoriaDelete(id)
         .then((res) => {
           this.loading = false;
@@ -242,6 +243,7 @@ export default {
       this.loading = true;
       // metodo axios
       const id = localStorage.getItem("id");
+      console.log(id);
       CrudService.categoriaUpdate(
         {
           nombre: this.editedItem.nombre,
@@ -283,6 +285,7 @@ export default {
           this.close();
           swal("Agregado!", "agregaste una categoria", "success");
           this.loading = false;
+          this.$router.push((location.href = "/categorias"));
         })
         .catch((error) => {
           console.log(error);

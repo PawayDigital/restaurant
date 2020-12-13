@@ -107,7 +107,8 @@ export default {
     exit() {
       localStorage.removeItem("token"),
         localStorage.removeItem("user"),
-        this.$router.push("/");
+        localStorage.clear();
+      this.$router.push("/");
     },
   },
 };
