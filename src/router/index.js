@@ -46,6 +46,14 @@ const routes = [
     },
   },
   {
+    path: "/categorias",
+    name: "Categoria",
+    component: () => import("@/Admin/Empresas/pages/Categoria.vue"),
+    meta: {
+      auth: true,
+    },
+  },
+  {
     path: "/carta",
     name: "Carta",
     component: () => import("@/Admin/Empresas/pages/Carta.vue"),
@@ -54,7 +62,7 @@ const routes = [
     },
   },
   {
-    path: "/menu",
+    path: "/:slug",
     name: "Menu",
     component: () => import("@/Admin/Menus/MenuOne/pages/Menu.vue"),
   },

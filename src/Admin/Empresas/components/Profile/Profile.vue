@@ -57,6 +57,9 @@
                   >Editar Informacion</router-link
                 >
               </v-btn>
+              <v-btn outlined text @click="menu">
+                Mirar menu
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -88,10 +91,15 @@ export default {
   },
   mounted() {
     this.user = JSON.parse(localStorage.getItem("user"));
+    localStorage.setItem("slug", this.user.slug);
     this.userData();
     this.miperfilimg();
   },
   methods: {
+    menu() {
+      const slug = localStorage.getItem("slug");
+      this.$router.push("/" + slug);
+    },
     userData() {
       ProfileService.perfil().then((res) => {
         if (res.status == 200) {

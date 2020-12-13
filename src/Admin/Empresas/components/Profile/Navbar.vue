@@ -54,7 +54,7 @@
             <v-list-item-subtitle align="center">Carta</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/">
+        <v-list-item to="/categorias">
           <v-list-item-content>
             <v-icon class="mb-3">category</v-icon>
             <v-list-item-subtitle align="center"

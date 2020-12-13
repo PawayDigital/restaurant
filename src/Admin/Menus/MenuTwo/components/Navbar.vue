@@ -71,4 +71,7 @@ export default {
 .v-application a {
   color: black !important;
 }
+.theme--light.v-card {
+  background-color: transparent !important;
+}
 </style>

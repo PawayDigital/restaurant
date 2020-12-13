@@ -7,3 +7,6 @@
 .theme--dark.v-icon {
   color: black !important;
 }
+#theme-carta .theme--light.v-card {
+  background-color: white !important;
+}
