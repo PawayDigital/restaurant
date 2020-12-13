@@ -100,7 +100,6 @@ export default {
       console.log(id);
       axios.get(this._url + "/productos/" + id).then((res) => {
         this.producto_one = res.data;
-        // console.log(this.producto_one);
       });
     },
   },

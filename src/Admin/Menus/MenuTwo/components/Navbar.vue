@@ -4,23 +4,17 @@
       <v-card flat tile>
         <v-app-bar app fixed dense>
           <v-img
-            lazy-src="@/Layouts/assets/logo/logo.svg"
             max-height="50"
             max-width="50"
-            src="@/Layouts/assets/logo/logo.svg"
+            :lazy-src="_url + perfilimg.url"
+            :src="_url + perfilimg.url"
             class="logo"
           ></v-img>
-          <v-toolbar-title>Restaurant</v-toolbar-title>
+          <v-toolbar-title>{{ perfil.nombre_empresa }}</v-toolbar-title>
 
           <v-spacer></v-spacer>
 
           <v-tabs color="secundary">
-            <v-tab to="/">
-              Menu
-            </v-tab>
-            <v-tab to="/contact">
-              Jugos
-            </v-tab>
             <v-tab to="/login">
               Sobre Nosotros
             </v-tab>
@@ -52,11 +46,33 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       drawer: false,
+      perfilimg: [],
+      perfil: [],
     };
+  },
+  mounted() {
+    this.miperfilimg();
+  },
+  computed: {
+    _url() {
+      return process.env.VUE_APP_RUTA_API;
+    },
+  },
+  methods: {
+    miperfilimg() {
+      const id = localStorage.getItem("id");
+      axios.get(this._url + "/users/" + id).then((res) => {
+        if (res.status == 200) {
+          this.perfilimg = res.data.foto.imagen;
+          this.perfil = res.data;
+        }
+      });
+    },
   },
 };
 </script>
