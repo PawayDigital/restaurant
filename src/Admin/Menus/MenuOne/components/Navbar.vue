@@ -16,11 +16,10 @@
         <v-list-item to="/">
           <v-list-item-content>
             <v-img
-              lazy-src="https://picsum.photos/id/11/10/6"
+              :lazy-src="_url + perfilimg.url"
+              :src="_url + perfilimg.url"
               max-height="150"
               max-width="250"
-              class="rounded"
-              src="https://picsum.photos/id/11/500/300"
             ></v-img>
           </v-list-item-content>
         </v-list-item>
@@ -44,12 +43,35 @@
 </template>
 
 <script>
+import ProfileService from "@/Admin/Empresas/services/profile.service";
+import axios from "axios";
 export default {
   name: "Navbar",
   data() {
     return {
       drawer: true,
+      userImage:
+        "https://www.softzone.es/app/uploads-softzone.es/2018/04/guest.png",
+      perfilimg: [],
     };
+  },
+  mounted() {
+    this.miperfilimg();
+  },
+  computed: {
+    _url() {
+      return process.env.VUE_APP_RUTA_API;
+    },
+  },
+  methods: {
+    miperfilimg() {
+      const id = localStorage.getItem("id");
+      axios.get(this._url + "/users/" + id).then((res) => {
+        if (res.status == 200) {
+          this.perfilimg = res.data.foto.imagen;
+        }
+      });
+    },
   },
 };
 </script>

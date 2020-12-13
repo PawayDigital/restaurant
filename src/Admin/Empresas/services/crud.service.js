@@ -11,7 +11,7 @@ export default new (class CrudService {
     });
   }
   getProductos() {
-    return axios.get(_url + "/productos", {
+    return axios.get(_url + "/producto/me", {
       headers: {
         Authorization: "Bearer " + token,
       },

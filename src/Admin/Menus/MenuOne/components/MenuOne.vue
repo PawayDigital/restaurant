@@ -2,16 +2,14 @@
   <div class="ancho-menu">
     <v-row>
       <v-col cols="12" sm="12" md="6" class="menu" style="height: 100vh;">
-        <v-tabs color="secundary" class="d-flex justify-center">
-          <v-tab to="/menu">
-            Menu
-          </v-tab>
-          <v-tab to="/menu">
-            Jugos
-          </v-tab>
-        </v-tabs>
         <v-row class="ml-1">
-          <v-col cols="12" sm="12" md="6">
+          <v-col
+            cols="12"
+            sm="12"
+            md="6"
+            v-for="pro in productos"
+            :key="pro.id"
+          >
             <v-card :loading="loading" class="mx-auto my-3" max-width="374">
               <template slot="progress">
                 <v-progress-linear
@@ -21,96 +19,16 @@
                 ></v-progress-linear>
               </template>
 
-              <v-img
-                height="100"
-                src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-              ></v-img>
+              <v-img height="100" :src="_url + pro.imagen.url"></v-img>
 
-              <v-card-title class="justify-center">Cafe Badilico</v-card-title>
-
-              <v-divider class="mx-4"></v-divider>
-
-              <v-card-actions class="justify-center">
-                <v-btn color="lighten-2" text>
-                  Ver
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <!--  -->
-          <v-col cols="12" sm="12" md="6">
-            <v-card :loading="loading" class="mx-auto my-3" max-width="374">
-              <template slot="progress">
-                <v-progress-linear
-                  color="deep-purple"
-                  height="10"
-                  indeterminate
-                ></v-progress-linear>
-              </template>
-
-              <v-img
-                height="100"
-                src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-              ></v-img>
-
-              <v-card-title class="justify-center">Cafe Badilico</v-card-title>
+              <v-card-title class="justify-center">{{
+                pro.nombre
+              }}</v-card-title>
 
               <v-divider class="mx-4"></v-divider>
 
               <v-card-actions class="justify-center">
-                <v-btn color="lighten-2" text>
-                  Ver
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <v-card :loading="loading" class="mx-auto my-3" max-width="374">
-              <template slot="progress">
-                <v-progress-linear
-                  color="deep-purple"
-                  height="10"
-                  indeterminate
-                ></v-progress-linear>
-              </template>
-
-              <v-img
-                height="100"
-                src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-              ></v-img>
-
-              <v-card-title class="justify-center">Cafe Badilico</v-card-title>
-
-              <v-divider class="mx-4"></v-divider>
-
-              <v-card-actions class="justify-center">
-                <v-btn color="lighten-2" text>
-                  Ver
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <v-card :loading="loading" class="mx-auto my-3" max-width="374">
-              <template slot="progress">
-                <v-progress-linear
-                  color="deep-purple"
-                  height="10"
-                  indeterminate
-                ></v-progress-linear>
-              </template>
-
-              <v-img
-                height="100"
-                src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-              ></v-img>
-
-              <v-card-title class="justify-center">Cafe Badilico</v-card-title>
-
-              <v-divider class="mx-4"></v-divider>
-
-              <v-card-actions class="justify-center">
-                <v-btn color="lighten-2" text>
+                <v-btn @click="ver(pro.id)" color="lighten-2" text>
                   Ver
                 </v-btn>
               </v-card-actions>
@@ -120,27 +38,14 @@
       </v-col>
       <v-col cols="12" sm="12" md="6" class="white">
         <div>
-          <v-img
-            height="300"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-          ></v-img>
+          <v-img height="300" :src="_url + producto_one.imagen.url"></v-img>
         </div>
         <div class="mt-3">
-          <h3 class="text-center mb-3">Mi restaurante</h3>
+          <h3 class="text-center mb-3">{{ producto_one.nombre }}</h3>
+          <p class="text-justify">{{ producto_one.descripcion }}</p>
           <p class="text-justify">
-            Sed porttitor lectus nibh. Donec sollicitudin molestie malesuada.
-            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-            posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
-            vel, ullamcorper sit amet ligula. Mauris blandit aliquet elit, eget
-            tincidunt nibh pulvinar a. Donec rutrum congue leo eget malesuada.
-            Nulla porttitor accumsan tincidunt.
-          </p>
-          <p class="text-justify">
-            Cras ultricies ligula sed magna dictum porta. Vivamus magna justo,
-            lacinia eget consectetur sed, convallis at tellus. Donec rutrum
-            congue leo eget malesuada. Vivamus suscipit tortor eget felis
-            porttitor volutpat. Vestibulum ac diam sit amet quam vehicula
-            elementum sed sit amet dui. Donec rutrum congue leo eget malesuada.
+            <span>Precio:</span>
+            {{ producto_one.precio }}
           </p>
         </div>
       </v-col>
@@ -149,19 +54,54 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 export default {
   data: () => ({
     loading: false,
     selection: 1,
     drawer: false,
+    productos: [],
+    producto_one: [],
   }),
-
+  computed: {
+    _url() {
+      return process.env.VUE_APP_RUTA_API;
+    },
+  },
+  mounted() {
+    this.menu();
+    this.default();
+  },
   methods: {
     reserve() {
       this.loading = true;
-
       setTimeout(() => (this.loading = false), 2000);
+    },
+    menu() {
+      axios
+        .get(this._url + "/producto/me", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            this.productos = res.data;
+          }
+        });
+    },
+    default() {
+      axios.get(this._url + "/productos/" + 11).then((res) => {
+        this.producto_one = res.data;
+        console.log(this.producto_one);
+      });
+    },
+    ver(id) {
+      console.log(id);
+      axios.get(this._url + "/productos/" + id).then((res) => {
+        this.producto_one = res.data;
+        // console.log(this.producto_one);
+      });
     },
   },
 };

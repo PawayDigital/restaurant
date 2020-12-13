@@ -98,6 +98,7 @@ export default {
   methods: {
     menu() {
       const slug = localStorage.getItem("slug");
+      localStorage.setItem("id", this.user.id);
       this.$router.push("/" + slug);
     },
     userData() {
