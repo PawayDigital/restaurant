@@ -59,6 +59,7 @@
 
 <script>
 import axios from "axios";
+import MenuService from "@/Admin/Menus/services/menu.service";
 export default {
   data: () => ({
     loading: false,
@@ -81,26 +82,19 @@ export default {
       setTimeout(() => (this.loading = false), 2000);
     },
     menu() {
-      axios
-        .get(this._url + "/producto/me", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            this.productos = res.data;
-          }
-        });
+      MenuService.menu().then((res) => {
+        if (res.status == 200) {
+          this.productos = res.data;
+        }
+      });
     },
     default() {
-      axios.get(this._url + "/productos/" + 11).then((res) => {
+      MenuService.producto_one(11).then((res) => {
         this.producto_one = res.data;
       });
     },
     ver(id) {
-      console.log(id);
-      axios.get(this._url + "/productos/" + id).then((res) => {
+      MenuService.producto_one(id).then((res) => {
         this.producto_one = res.data;
       });
     },
