@@ -110,21 +110,32 @@
                       </v-btn>
                       <v-btn
                         v-if="edit_id"
+                        :disabled="loading"
                         color="blue darken-1"
                         text
                         @click="editar()"
                       >
                         editar
                       </v-btn>
-                      <v-btn v-else color="blue darken-1" text @click="save()">
+                      <v-btn
+                        v-else
+                        :disabled="loading"
+                        color="blue darken-1"
+                        text
+                        @click="save()"
+                      >
                         Guardar
                       </v-btn>
+                      <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="black"
+                      ></v-progress-circular>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
                 <v-dialog v-model="dialogDelete" max-width="500px">
                   <v-card>
-                    <!-- <template v-slot:[`item.actions`]="{ item }"> -->
                     <v-card-title class="headline text-center"
                       >Se eliminara este producto?</v-card-title
                     >
@@ -135,13 +146,18 @@
                       >
                       <v-btn
                         color="blue darken-1"
+                        :disabled="loading"
                         text
                         @click="deleteItemConfirm()"
                         >Confirmar</v-btn
                       >
+                      <v-progress-circular
+                        v-if="loading"
+                        indeterminate
+                        color="black"
+                      ></v-progress-circular>
                       <v-spacer></v-spacer>
                     </v-card-actions>
-                    <!-- </template> -->
                   </v-card>
                 </v-dialog>
               </v-toolbar>
@@ -168,7 +184,6 @@
 
 <script>
 import CrudService from "@/Admin/Empresas/services/crud.service";
-import axios from "axios";
 import swal from "sweetalert";
 export default {
   name: "Table",
@@ -199,6 +214,7 @@ export default {
     ],
     previewImage: "https://via.placeholder.com/150",
     cate: [],
+    loading: false,
 
     desserts: [],
     editedIndex: -1,
@@ -297,12 +313,16 @@ export default {
     },
 
     deleteItemConfirm() {
+      this.loading = true;
       // metodo axios
       const id = localStorage.getItem("id");
       CrudService.delete(id)
         .then((res) => {
+          this.loading = false;
           localStorage.removeItem("id");
           swal("eliminado!", "se elimino el producto", "success");
+          this.closeDelete();
+          this.desserts.splice(this.editedIndex, 1);
         })
         .catch((error) => {
           console.log(error);
@@ -312,8 +332,6 @@ export default {
             "error"
           );
         });
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
     },
 
     close() {
@@ -333,6 +351,7 @@ export default {
     },
 
     editar() {
+      this.loading = true;
       const id = localStorage.getItem("id");
       const data = {
         nombre: this.editedItem.nombre,
@@ -346,6 +365,7 @@ export default {
       fd.append("data", JSON.stringify(data));
       CrudService.update(fd, id)
         .then((res) => {
+          this.loading = false;
           localStorage.removeItem("id");
           if (this.editedIndex > -1) {
             Object.assign(this.desserts[this.editedIndex], this.editedItem);
@@ -366,6 +386,7 @@ export default {
     },
 
     save() {
+      this.loading = true;
       console.log("hola");
       const data = {
         nombre: this.editedItem.nombre,
@@ -379,6 +400,7 @@ export default {
       fd.append("data", JSON.stringify(data));
       CrudService.save(fd)
         .then((res) => {
+          this.loading = false;
           if (this.editedIndex > -1) {
             Object.assign(this.desserts[this.editedIndex], this.editedItem);
           } else {
