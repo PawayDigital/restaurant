@@ -19,7 +19,7 @@
             </template>
             <template v-slot:top>
               <v-toolbar flat>
-                <v-toolbar-title>Productos</v-toolbar-title>
+                <v-toolbar-title>Carta</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
@@ -116,7 +116,7 @@
                       >
                         editar
                       </v-btn>
-                      <v-btn v-else color="blue darken-1" text @click="save">
+                      <v-btn v-else color="blue darken-1" text @click="save()">
                         Guardar
                       </v-btn>
                     </v-card-actions>
@@ -167,6 +167,7 @@
 </template>
 
 <script>
+import CrudService from "@/Admin/Empresas/services/crud.service";
 import axios from "axios";
 import swal from "sweetalert";
 export default {
@@ -256,40 +257,28 @@ export default {
       this.editedItem.url = file[0]; //this.url es la imagen que se envia a la base de datos
     },
     categorias() {
-      axios
-        .get(process.env.VUE_APP_RUTA_API + "/categorias", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          this.cate = res.data;
-        });
+      CrudService.getCategorias().then((res) => {
+        this.cate = res.data;
+      });
     },
     initialize() {
-      axios
-        .get(process.env.VUE_APP_RUTA_API + "/productos", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          this.desserts = res.data.map((item) => {
-            // console.log(item);
-            for (const object of res.data) {
-              const image = object.imagen.url;
-              const _urlImage = process.env.VUE_APP_RUTA_API + image;
-              const imagen = JSON.stringify(_urlImage);
-            }
-            return {
-              id: item.id,
-              imagen: JSON.stringify(item.imagen.url).replace(/['"]+/g, ""),
-              nombre: item.nombre,
-              descripcion: item.descripcion,
-              precio: item.precio,
-            };
-          });
+      CrudService.getProductos().then((res) => {
+        this.desserts = res.data.map((item) => {
+          // console.log(item);
+          for (const object of res.data) {
+            const image = object.imagen.url;
+            const _urlImage = process.env.VUE_APP_RUTA_API + image;
+            const imagen = JSON.stringify(_urlImage);
+          }
+          return {
+            id: item.id,
+            imagen: JSON.stringify(item.imagen.url).replace(/['"]+/g, ""),
+            nombre: item.nombre,
+            descripcion: item.descripcion,
+            precio: item.precio,
+          };
         });
+      });
     },
 
     editItem(item) {
@@ -310,12 +299,7 @@ export default {
     deleteItemConfirm() {
       // metodo axios
       const id = localStorage.getItem("id");
-      axios
-        .delete(process.env.VUE_APP_RUTA_API + "/productos/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        })
+      CrudService.delete(id)
         .then((res) => {
           localStorage.removeItem("id");
           swal("eliminado!", "se elimino el producto", "success");
@@ -360,18 +344,7 @@ export default {
       const fd = new FormData();
       fd.append("files.imagen", this.editedItem.url);
       fd.append("data", JSON.stringify(data));
-      axios
-        .put(
-          process.env.VUE_APP_RUTA_API + "/productos/" + id,
-
-          fd,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        )
+      CrudService.update(fd, id)
         .then((res) => {
           localStorage.removeItem("id");
           if (this.editedIndex > -1) {
@@ -393,6 +366,7 @@ export default {
     },
 
     save() {
+      console.log("hola");
       const data = {
         nombre: this.editedItem.nombre,
         descripcion: this.editedItem.descripcion,
@@ -403,18 +377,7 @@ export default {
       const fd = new FormData();
       fd.append("files.imagen", this.editedItem.url);
       fd.append("data", JSON.stringify(data));
-      axios
-        .post(
-          process.env.VUE_APP_RUTA_API + "/productos",
-
-          fd,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          }
-        )
+      CrudService.save(fd)
         .then((res) => {
           if (this.editedIndex > -1) {
             Object.assign(this.desserts[this.editedIndex], this.editedItem);
