@@ -9,21 +9,29 @@
             sort-by="calories"
             class="elevation-1"
           >
+            <template v-slot:[`item.imagen`]="{ item }">
+              <img
+                :src="_urlImageTable + item.imagen"
+                :alt="item.name"
+                width="50px"
+                height="50px"
+              />
+            </template>
             <template v-slot:top>
               <v-toolbar flat>
-                <v-toolbar-title>My CRUD</v-toolbar-title>
+                <v-toolbar-title>Productos</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                      color="primary"
+                      color="black"
                       dark
                       class="mb-2"
                       v-bind="attrs"
                       v-on="on"
                     >
-                      New Item
+                      Agregar
                     </v-btn>
                   </template>
                   <v-card id="theme-carta">
@@ -34,35 +42,62 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="4">
+                          <!-- formulario -->
+                          <v-col cols="12" sm="6" md="6">
                             <v-text-field
-                              v-model="editedItem.name"
-                              label="Dessert name"
+                              v-model="editedItem.nombre"
+                              label="Nombre"
+                              type="text"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-col cols="12" sm="6" md="6">
                             <v-text-field
-                              v-model="editedItem.calories"
-                              label="Calories"
+                              v-model="editedItem.precio"
+                              label="Precio"
+                              type="number"
+                              required
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
-                            <v-text-field
-                              v-model="editedItem.fat"
-                              label="Fat (g)"
-                            ></v-text-field>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-img
+                              :src="previewImage"
+                              height="100"
+                              width="100%"
+                            ></v-img>
+
+                            <v-btn block class="mt-4" @click="selectImage"
+                              >Subir imagen</v-btn
+                            >
+                            <input
+                              ref="fileInput"
+                              style="display: none;"
+                              accept="image/*"
+                              type="file"
+                              @input="pickFile"
+                            />
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
-                            <v-text-field
-                              v-model="editedItem.carbs"
-                              label="Carbs (g)"
-                            ></v-text-field>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-textarea
+                              clearable
+                              v-model="editedItem.descripcion"
+                              clear-icon="mdi-close-circle"
+                              auto-grow
+                              label="Descripcion"
+                            ></v-textarea>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
-                            <v-text-field
-                              v-model="editedItem.protein"
-                              label="Protein (g)"
-                            ></v-text-field>
+                          <v-col cols="12" sm="6" md="6">
+                            <select
+                              v-model="editedItem.categoria"
+                              class="select-css"
+                            >
+                              <option value="">seleccione la Categoria</option>
+                              <option
+                                v-for="categori in cate"
+                                v-bind:key="categori.id"
+                                :value="categori.id"
+                                >{{ categori.nombre }}</option
+                              >
+                            </select>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -71,32 +106,34 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="close">
-                        Cancel
+                        Cancelar
                       </v-btn>
                       <v-btn color="blue darken-1" text @click="save">
-                        Save
+                        Guardar
                       </v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
                 <v-dialog v-model="dialogDelete" max-width="500px">
                   <v-card>
-                    <v-card-title class="headline"
-                      >Are you sure you want to delete this item?</v-card-title
+                    <!-- <template v-slot:[`item.actions`]="{ item }"> -->
+                    <v-card-title class="headline text-center"
+                      >Se eliminara este producto?</v-card-title
                     >
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="closeDelete"
-                        >Cancel</v-btn
+                        >Cancelar</v-btn
                       >
                       <v-btn
                         color="blue darken-1"
                         text
-                        @click="deleteItemConfirm"
-                        >OK</v-btn
+                        @click="deleteItemConfirm()"
+                        >Confirmar</v-btn
                       >
                       <v-spacer></v-spacer>
                     </v-card-actions>
+                    <!-- </template> -->
                   </v-card>
                 </v-dialog>
               </v-toolbar>
@@ -110,8 +147,8 @@
               </v-icon>
             </template>
             <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">
-                Reset
+              <v-btn color="black" dark @click="initialize">
+                Reiniciar
               </v-btn>
             </template>
           </v-data-table>
@@ -122,45 +159,60 @@
 </template>
 
 <script>
+import axios from "axios";
+import swal from "sweetalert";
 export default {
   name: "Table",
   data: () => ({
     dialog: false,
     dialogDelete: false,
     headers: [
+      // tabla
       {
-        text: "Dessert (100g serving)",
-        align: "start",
+        text: "imagen",
+        align: "center",
         sortable: false,
-        value: "name",
+        value: "imagen",
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Actions", value: "actions", sortable: false },
+      {
+        text: "Nombre",
+        align: "center",
+        sortable: false,
+        value: "nombre",
+      },
+      {
+        text: "Precio",
+        align: "center",
+        sortable: false,
+        value: "precio",
+      },
+      { text: "Acciones", value: "actions", sortable: false },
     ],
+    previewImage: "https://via.placeholder.com/150",
+    select: { state: "Florida", abbr: "FL" },
+    cate: [],
+
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      id: null,
+      nombre: "",
+      descripcion: "",
+      categoria: "",
+      url: null,
+      precio: null,
     },
     defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      nombre: "",
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
+    },
+    _urlImageTable() {
+      return process.env.VUE_APP_RUTA_API;
     },
   },
 
@@ -175,82 +227,60 @@ export default {
 
   created() {
     this.initialize();
+    this.categorias();
   },
 
   methods: {
+    selectImage() {
+      this.$refs.fileInput.click();
+    },
+    pickFile() {
+      let input = this.$refs.fileInput;
+      let file = input.files;
+      if (file && file[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result;
+        };
+        reader.readAsDataURL(file[0]);
+        this.$emit("input", file[0]);
+      }
+      this.editedItem.url = file[0]; //this.url es la imagen que se envia a la base de datos
+    },
+    categorias() {
+      axios
+        .get(process.env.VUE_APP_RUTA_API + "/categorias", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          this.cate = res.data;
+        });
+    },
     initialize() {
-      this.desserts = [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-        },
-      ];
+      axios
+        .get(process.env.VUE_APP_RUTA_API + "/productos", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          this.desserts = res.data.map((item) => {
+            // console.log(item);
+            for (const object of res.data) {
+              const image = object.imagen.url;
+              const _urlImage = process.env.VUE_APP_RUTA_API + image;
+              const imagen = JSON.stringify(_urlImage);
+            }
+            return {
+              id: item.id,
+              imagen: JSON.stringify(item.imagen.url).replace(/['"]+/g, ""),
+              nombre: item.nombre,
+              precio: item.precio,
+            };
+          });
+        });
     },
 
     editItem(item) {
@@ -263,9 +293,30 @@ export default {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
+      localStorage.setItem("id", this.editedItem.id);
     },
 
     deleteItemConfirm() {
+      // metodo axios
+      const id = localStorage.getItem("id");
+      axios
+        .delete(process.env.VUE_APP_RUTA_API + "/productos/" + id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          localStorage.removeItem("id");
+          swal("eliminado!", "se elimino el producto", "success");
+        })
+        .catch((error) => {
+          console.log(error);
+          swal(
+            "Ha ocurrido un error!",
+            "tu producto no se ha eliminado",
+            "error"
+          );
+        });
       this.desserts.splice(this.editedIndex, 1);
       this.closeDelete();
     },
@@ -287,12 +338,45 @@ export default {
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
+      const data = {
+        nombre: this.editedItem.nombre,
+        descripcion: this.editedItem.descripcion,
+        precio: this.editedItem.precio,
+        categorias: [this.editedItem.categoria],
+        estado: true,
+      };
+      const fd = new FormData();
+      fd.append("files.imagen", this.editedItem.url);
+      fd.append("data", JSON.stringify(data));
+      axios
+        .post(
+          process.env.VUE_APP_RUTA_API + "/productos",
+
+          fd,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (this.editedIndex > -1) {
+            Object.assign(this.desserts[this.editedIndex], this.editedItem);
+          } else {
+            this.desserts.push(this.editedItem);
+          }
+          swal("Agregado!", "agregaste un nuevo producto", "success");
+          this.close();
+        })
+        .catch((error) => {
+          console.log(error);
+          swal(
+            "Ha ocurrido un error!",
+            "tu producto no se ha guardado",
+            "error"
+          );
+        });
     },
   },
 };
